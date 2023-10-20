@@ -10,6 +10,7 @@ http_archive(
     ],
 )
 
+# https://github.com/tensorflow/tensorflow/blob/v2.14.0/third_party/absl/workspace.bzl#L10-L12
 http_archive(
     name = "com_google_absl",
     sha256 = "8eeec9382fc0338ef5c60053f3a4b0e0708361375fe51c9e65d0ce46ccfe55a7",  # SHARED_ABSL_SHA
@@ -24,11 +25,15 @@ load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
 
 bazel_skylib_workspace()
 
+# https://github.com/tensorflow/tensorflow/blob/v2.14.0/third_party/pybind11_bazel/workspace.bzl#L9C5-L17
+PB_COMMIT = "72cbbf1fbc830e487e3012862b7b720001b70672"
+PB_SHA256 = "516c1b3a10d87740d2b7de6f121f8e19dde2c372ecbfe59aef44cd1872c10395"
 http_archive(
     name = "pybind11_bazel",
-    sha256 = "8f546c03bdd55d0e88cb491ddfbabe5aeb087f87de2fbf441391d70483affe39",
-    strip_prefix = "pybind11_bazel-26973c0ff320cb4b39e45bc3e4297b82bc3a6c09",
-    urls = ["https://github.com/pybind/pybind11_bazel/archive/26973c0ff320cb4b39e45bc3e4297b82bc3a6c09.tar.gz"],
+    strip_prefix = "pybind11_bazel-{commit}".format(commit = PB_COMMIT),
+    sha256 = PB_SHA256,
+    # patch_file = ["//third_party/pybind11_bazel:pybind11_bazel.patch"],
+    urls = ["https://github.com/pybind/pybind11_bazel/archive/{commit}.tar.gz".format(commit = PB_COMMIT)],
 )
 
 http_archive(
@@ -45,6 +50,7 @@ http_archive(
 load("@//third_party:python_configure.bzl", "python_configure")
 python_configure(name = "local_config_python")
 
+# https://github.com/tensorflow/tensorflow/blob/v2.14.0/third_party/pybind11_abseil/workspace.bzl#L10-L13
 http_archive(
     name = "pybind11_abseil",
     sha256 = "0223b647b8cc817336a51e787980ebc299c8d5e64c069829bf34b69d72337449",
